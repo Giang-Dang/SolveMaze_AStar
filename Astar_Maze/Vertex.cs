@@ -5,7 +5,7 @@ namespace AStar_Maze
         public Position myPos, basePos;
         public bool isAllowed;
         public bool isChecked;
-        public double G, H;
+        public double G, H, F;
         public Vertex(int _X, int _Y, bool _isAllowed)
         {
             myPos = new Position(_X, _Y);
@@ -23,6 +23,10 @@ namespace AStar_Maze
         public void CalculateAndUpdateH(Vertex end)
         {
             H = Math.Sqrt(Math.Pow(end.myPos.X - myPos.X, 2) + Math.Pow(end.myPos.Y - myPos.Y, 2));
+        }
+        public void CalculateAndUpdateF()
+        {
+            F = G + H;
         }
     }
 }

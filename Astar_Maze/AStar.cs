@@ -65,6 +65,7 @@ namespace AStar_Maze
 
                                 Maze[newX, newY].UpdateG(baseVertex.G + 1);
                                 Maze[newX, newY].CalculateAndUpdateH(End);
+                                Maze[newX, newY].CalculateAndUpdateF();
                                 Maze[newX, newY].basePos = baseVertex.myPos;
                                 //Check if End is pushed into queue
                                 if(End.myPos.Equals(Maze[newX, newY].myPos))
@@ -90,6 +91,7 @@ namespace AStar_Maze
                                     // Console.WriteLine($"Old basePos({Maze[newX, newY].basePos.X},{Maze[newX, newY].basePos.Y})");
 
                                     Maze[newX, newY].G = baseVertex.G + 1;
+                                    Maze[newX, newY].CalculateAndUpdateF();
                                     Maze[newX, newY].basePos = baseVertex.myPos;
                                     
                                     // //test
@@ -100,6 +102,8 @@ namespace AStar_Maze
                         }
                     }
                 }
+                //sort
+                priorityQueue = priorityQueue.OrderBy(v => v.F).ToList();
                 //if End in queue & poped out
                 if (isEndInQueue && baseVertex.myPos.Equals(End.myPos))
                 {
@@ -116,7 +120,7 @@ namespace AStar_Maze
                 Result = TraceBack(ref Maze, End, Start);
             }
             // //test
-            // Console.WriteLine($"{isEndInQueue} && {isEndPoppedOut}");
+            Console.WriteLine($"{isEndInQueue} && {isEndPoppedOut}");
             return isEndInQueue && isEndPoppedOut;
         }
 
