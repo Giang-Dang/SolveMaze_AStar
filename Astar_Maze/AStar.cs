@@ -10,16 +10,30 @@ namespace AStar_Maze
             Start.CalculateAndUpdateH(End);
             priorityQueue.Add(Start);
             Maze[Start.myPos.X, Start.myPos.Y].isChecked = true;
-            
+
+            //test
+            // string path = $"{System.IO.Directory.GetCurrentDirectory()}\\Solving.txt";
+            // Console.WriteLine($"Start ({Start.myPos.X},{Start.myPos.Y})");
+            // Console.WriteLine($"End ({End.myPos.X},{End.myPos.Y})");
+
             bool isEndInQueue = false, isEndPoppedOut = false;
 
             while(priorityQueue.Any() && !isEndPoppedOut)
             {
+                //test
+                // Console.WriteLine($"Maze({priorityQueue[0].myPos.X},{priorityQueue[0].myPos.Y}) is popped out");
+
                 //pop 1st element in queue -> currentVertex;
-                baseVertex = priorityQueue[0];
-                priorityQueue.RemoveAt(0);
+                baseVertex = priorityQueue.MinBy(v => v.F);
                 int baseX = baseVertex.myPos.X;
                 int baseY = baseVertex.myPos.Y;
+                Maze[baseX,baseY].isAllowed = false;
+
+                //test
+                // Console.WriteLine($"Maze({baseVertex.myPos.X},{baseVertex.myPos.Y}) isChecked={baseVertex.isChecked} is popped out");
+
+                priorityQueue.Remove(priorityQueue.MinBy(v => v.F));
+                
 
                 //Expand surrounding cells and check valid?, isAllowed?, isBaseVertex?
                 for (int i = -1; i <= 1; i++)
@@ -76,7 +90,7 @@ namespace AStar_Maze
                                 Maze[newX, newY].isChecked = true;
 
                                 // //test
-                                // Console.WriteLine($"G=({Maze[newX, newY].G}) H=({Maze[newX, newY].H}) basePos=({Maze[newX, newY].basePos.X},{Maze[newX, newY].basePos.Y}) - Maze({newX},{newY}) is added into Queue.");
+                                // Console.WriteLine($"G=({Maze[newX, newY].G}) H=({Maze[newX, newY].H}) F=({Maze[newX, newY].F}) basePos=({Maze[newX, newY].basePos.X},{Maze[newX, newY].basePos.Y}) - Maze({newX},{newY}) is added into Queue.");
                             }
 
                             //if cell already in queue and newG is better -> update newG to vertex in maze, baseVertex->basePos 
@@ -84,26 +98,46 @@ namespace AStar_Maze
                             {
                                 // //test
                                 // Console.WriteLine($"Maze({newX},{newY}) is in Queue");
+                                int indexOfCurrentVertex = IndexOfVertexPosition(ref priorityQueue, Maze[newX, newY]);
 
-                                if(baseVertex.G + 1 < Maze[newX, newY].G)
+                                if( priorityQueue[indexOfCurrentVertex].F < Maze[newX, newY].CalculateF(baseVertex.G + 1))
                                 {
-                                    // //test
-                                    // Console.WriteLine($"Old basePos({Maze[newX, newY].basePos.X},{Maze[newX, newY].basePos.Y})");
+                                    //test
+                                    // Console.Write($"priorityQueue[indexOfCurrentVertex].F=({priorityQueue[indexOfCurrentVertex].F}) Maze[newX, newY].CalculateF(baseVertex.G)=({Maze[newX, newY].CalculateF(baseVertex.G)}). ");
+                                    // Console.WriteLine($"Old basePos ({Maze[newX, newY].basePos.X},{Maze[newX, newY].basePos.Y})");
 
                                     Maze[newX, newY].G = baseVertex.G + 1;
                                     Maze[newX, newY].CalculateAndUpdateF();
                                     Maze[newX, newY].basePos = baseVertex.myPos;
                                     
                                     // //test
-                                    // Console.WriteLine($"Maze({newX},{newY}: G=({Maze[newX, newY].G}) H=({Maze[newX, newY].H}) New basePos=({Maze[newX, newY].basePos.X},{Maze[newX, newY].basePos.Y}) is editted.");
+                                    // Console.WriteLine($"G=({Maze[newX, newY].G}) H=({Maze[newX, newY].H}) F=({Maze[newX, newY].F}) basePos=({Maze[newX, newY].basePos.X},{Maze[newX, newY].basePos.Y}) - Maze({newX},{newY}) is added into Queue.");
                                 }    
                             }
 
                         }
                     }
                 }
+                //test
+                // Console.WriteLine("Before sorting: ");
+                // foreach(var vertex in priorityQueue)
+                // {
+                //     Console.WriteLine($" - Maze({vertex.myPos.X},{vertex.myPos.Y}) - G=({vertex.G}) H=({vertex.H}) F=({vertex.F}) basePos=({vertex.basePos.X},{vertex.basePos.Y}) ");
+                // }
+                // Console.WriteLine("\n==================");
+
                 //sort
-                priorityQueue = priorityQueue.OrderBy(v => v.F).ToList();
+                // priorityQueue = priorityQueue.OrderBy(v => v.F).ToList();
+                
+                //test
+                // Console.WriteLine("After sorting: ");
+                // foreach(var vertex in priorityQueue)
+                // {
+                //     Console.WriteLine($" - Maze({vertex.myPos.X},{vertex.myPos.Y}) - G=({vertex.G}) H=({vertex.H}) F=({vertex.F}) basePos=({vertex.basePos.X},{vertex.basePos.Y}) ");
+                // }
+                // Console.WriteLine("\n==================");
+                // Console.ReadLine();
+
                 //if End in queue & poped out
                 if (isEndInQueue && baseVertex.myPos.Equals(End.myPos))
                 {
@@ -134,6 +168,18 @@ namespace AStar_Maze
                 }
             }
             return false;
+        }
+
+        private static int IndexOfVertexPosition(ref List<Vertex> queue, Vertex checkingVertex)
+        {
+            for(int i = 0; i < queue.Count ; i++)
+            {
+                if(queue[i].myPos.Equals(checkingVertex.myPos))
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
 
         private static List<Position> TraceBack(ref Vertex[,] maze, Vertex end, Vertex start)

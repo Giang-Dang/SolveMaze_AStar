@@ -13,9 +13,9 @@ namespace AStar_Maze
                 for (int y = 0; y < image.Height; y++)
                 {
                     Color color = image.GetPixel(x, y);
-                    bool isBlue = color.R < 80 && color.G < 80 && color.B > 150;
-                    bool isRed = color.R > 150 && color.G < 80 && color.B < 80;
-                    bool isBlack = color.R < 80 && color.B < 80 && color.G < 80;
+                    bool isBlue = color.R < 60 && color.G < 60 && color.B > 150;
+                    bool isRed = color.R > 150 && color.G < 60 && color.B < 60;
+                    bool isBlack = color.R < 60 && color.B < 60 && color.G < 60;
                     bool isAllowed = !isBlack;
 
                     res[x,y] = new Vertex(x, y, isAllowed);

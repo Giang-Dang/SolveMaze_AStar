@@ -28,5 +28,9 @@ namespace AStar_Maze
         {
             F = G + H;
         }
+        public double CalculateF(double newG)
+        {
+            return newG + H;
+        }
     }
 }

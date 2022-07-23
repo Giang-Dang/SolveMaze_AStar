@@ -14,11 +14,11 @@ if (args[0] != null)
     Vertex Start = new Vertex(0, 0, false);
     Vertex End = new Vertex(0, 0, false);
     Vertex [,] maze = ImageProcessing.ConvertImageToMatrix(Image, ref Start, ref End);
-    // OutputMatrix.OutputMatrixToTxt("matrix.txt",maze , Start, End);
-    // Console.WriteLine("Start : " + Start.myPos.X + " " + Start.myPos.Y);
-    // Console.WriteLine("End : " + End.myPos.X + " " + End.myPos.Y);
-    // Console.WriteLine("==============");
-    // Console.ReadKey();
+    OutputMatrix.OutputMatrixToTxt("matrix.txt",maze , Start, End);
+    Console.WriteLine("Start : " + Start.myPos.X + " " + Start.myPos.Y);
+    Console.WriteLine("End : " + End.myPos.X + " " + End.myPos.Y);
+    Console.WriteLine("==============");
+    Console.ReadKey();
     List<Position> Result = new List<Position>();
     if (AStar.SolveMaze(ref maze, ref Start, ref End, ref Result))
     {
