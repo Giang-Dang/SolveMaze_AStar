@@ -15,7 +15,7 @@ namespace AStar_Maze
 
             while(priorityQueue.Any() && !isEndPoppedOut)
             {
-                //pop 1st element in queue -> currentVertex;
+                //pop the element has the minimum F(x) in queue -> currentVertex;
                 baseVertex = priorityQueue.MinBy(v => v.F);
                 int baseX = baseVertex.myPos.X;
                 int baseY = baseVertex.myPos.Y;
