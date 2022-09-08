@@ -1,4 +1,4 @@
-# Solve Maze - A pet project after learning A star algorithm
+# Solve Maze - A pet project after learning A star (A*) algorithm
 
 ## Table of Contents
 
