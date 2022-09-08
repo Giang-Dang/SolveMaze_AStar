@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using AStar_Maze;
 using System.Diagnostics;
-using System.Threading;
+
 
 Stopwatch stopwatch = new Stopwatch();
 stopwatch.Start();
